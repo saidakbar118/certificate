@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sertifikat</title>
+  <style>
+    body {
+      margin: 0;
+      background: #f5f7fa;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      padding: 10px;
+    }
+
+    img {
+      width: auto;
+      max-width: 100%;
+      height: auto;
+      max-height: 90vh; /* kompyuterda ekranning 90% balandligidan oshmasin */
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+
+    /* 📱 Mobil uchun (balandroq bo‘lishi mumkin) */
+    @media (max-width: 768px) {
+      img {
+        max-height: none;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  {% if pk == 1 %}
+    <img src="{% static 'certificate1.png' %}" alt="Sertifikat 1">
+  {% elif pk == 2 %}
+    <img src="{% static 'certificate2.png' %}" alt="Sertifikat 2">
+  {% else %}
+    <p>Sertifikat topilmadi 😢</p>
+  {% endif %}
+</body>
+</html>
