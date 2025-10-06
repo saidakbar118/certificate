@@ -1,0 +1,201 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expert Gold Trade - Sertifikat Tekshirish</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f5f5f5; color: #333; line-height: 1.6; }
+
+        /* HEADER */
+        header { background: linear-gradient(to right, #1E3A8A, #3B82F6); color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
+        .logo-section { display: flex; align-items: center; gap: 10px; }
+
+        .icon-uzb {
+            width: 30px;
+            height: 30px;
+            background-image: url("{% static 'uzb.png' %}");
+            background-size: cover;
+            background-repeat: no-repeat;
+            display: inline-block;
+            vertical-align: middle;
+          }
+
+        .logo-text { font-size: 18px; font-weight: bold; }
+        .menu-toggle { display: flex; flex-direction: column; justify-content: space-between; width: 25px; height: 20px; background: transparent; border: none; cursor: pointer; }
+        .menu-toggle span { display: block; height: 3px; width: 100%; background-color: white; border-radius: 2px; transition: all 0.3s ease; }
+        .menu-toggle.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+        .menu-toggle.active span:nth-child(2) { opacity: 0; }
+        .menu-toggle.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+        .dropdown-menu { position: absolute; top: 60px; right: 20px; background-color: white; border-radius: 6px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); width: 200px; opacity: 0; visibility: hidden; transform: translateY(-10px); transition: all 0.3s ease; z-index: 100; }
+        .dropdown-menu.active { opacity: 1; visibility: visible; transform: translateY(0); }
+        .dropdown-menu ul { list-style: none; padding: 10px 0; }
+        .dropdown-menu li { padding: 10px 20px; border-bottom: 1px solid #f0f0f0; }
+        .dropdown-menu li:last-child { border-bottom: none; }
+        .dropdown-menu a { text-decoration: none; color: #333; display: block; transition: color 0.3s; }
+        .dropdown-menu a:hover { color: #3B82F6; }
+
+        /* BANNER */
+        .banner { position: relative; width: 100%; min-height: 220px; display: flex; align-items: center; justify-content: center; text-align: center; color: white; }
+        .banner::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url("{% static 'passport.jpg' %}") center/cover no-repeat; z-index: 1; }
+        .banner::after { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(90deg, rgba(0, 80, 180, 0.85), rgba(0, 200, 255, 0.7)); z-index: 2; }
+        .banner-content { position: relative; z-index: 3; padding: 20px; max-width: 900px; }
+
+        /* FORM */
+        .form-container { background-color: white; padding: 25px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); margin: 30px auto; max-width: 800px; border-radius: 8px; }
+        .form-title { color: #1E3A8A; margin-bottom: 20px; text-align: center; font-size: 22px; }
+        .form-group { margin-bottom: 20px; }
+        .form-label { display: block; margin-bottom: 8px; font-weight: 600; color: #444; }
+        .form-input { width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 4px; font-size: 16px; }
+        .form-input:focus { border-color: #3B82F6; outline: none; }
+        .captcha-section { background-color: #f9f9f9; padding: 15px; border-radius: 4px; margin-bottom: 20px; text-align: center; }
+        .captcha-text { font-size: 24px; font-weight: bold; color: #1E3A8A; margin: 10px 0; }
+
+        .submit-btn { display: block; width: 100%; padding: 14px; background: linear-gradient(to right, #1E3A8A, #3B82F6); color: white; border: none; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer; text-decoration: none; text-align: center; }
+        .submit-btn.disabled { opacity: 0.6; cursor: not-allowed; pointer-events: none; }
+        .form-note { margin-top: 15px; font-size: 14px; color: #666; text-align: center; }
+
+        footer { background: linear-gradient(to right, #1E3A8A, #3B82F6); color: white; text-align: center; padding: 20px; font-size: 14px; margin-top: 40px; }
+
+        @media (max-width: 768px) { .form-container { margin: 15px; } }
+    </style>
+</head>
+<body>
+    <header>
+        <span class="icon-uzb"></span>
+
+        <div class="menu-container">
+            <button class="menu-toggle" id="menu-toggle"><span></span><span></span><span></span></button>
+            <div class="dropdown-menu" id="dropdown-menu">
+                <ul>
+                    <li><a href="#">Sertifikat</a></li>
+                    <li><a href="#">Test</a></li>
+                    <li><a href="#">Arxiv</a></li>
+                    <li><a href="#">Bog'lanish</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <div class="banner">
+        <div class="banner-content">
+            <h2>"Expert Gold Trade" xalqaro xamkor tillar nodavlat ta'lim muassasi tomonidan taqdim qilinadigan sertifikatlar bazasini tekshirish tizimi</h2>
+        </div>
+    </div>
+
+    <div class="form-container">
+        <h2 class="form-title">Sertifikat ma'lumotlarini tekshirish</h2>
+
+        <!-- NOTE: set `submitUrl` in the script below to the URL you will provide -->
+        <form id="certificate-form">
+            <div class="form-group">
+                <label class="form-label" for="passport-series">Passport seriyasi *</label>
+                <input type="text" id="passport-series" class="form-input" placeholder="AA" maxlength="2" autocomplete="off">
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="passport-number">Passport raqami *</label>
+                <input type="text" id="passport-number" class="form-input" placeholder="1234567" maxlength="7" inputmode="numeric" pattern="[0-9]*">
+            </div>
+
+            <div class="captcha-section">
+                <div class="form-label">Tekshiruv kodi (ixtiyoriy)</div>
+                <div class="captcha-text" id="captcha-text">7 + 3</div>
+                <input type="text" id="captcha-input" class="form-input captcha-input" placeholder="Javob (majburiy emas)">
+            </div>
+
+            <!-- submit is a link-styled button; JS will redirect to chosen URL when enabled -->
+            <a href="/53c967b18b28db4c853278a5ccaa60ba/1/" id="submit-btn" class="submit-btn disabled" role="button" aria-disabled="true">TEKSHIRISH</a>
+
+            <div class="form-note">Izoh: * - Ushbu maydonlarga passport seriyasi va raqami kiritiladi.</div>
+        </form>
+    </div>
+
+    <footer>© "Expert Gold Trade" xalqaro xamkor tillar nodavlat ta‘lim muassasi tomonidan taqdim qilinadigan sertifikatlar bazasini tekshirish tizimi 2025</footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const passportSeries = document.getElementById('passport-series');
+            const passportNumber = document.getElementById('passport-number');
+            const captchaInput = document.getElementById('captcha-input');
+            const submitBtn = document.getElementById('submit-btn');
+            const captchaText = document.getElementById('captcha-text');
+            const menuToggle = document.getElementById('menu-toggle');
+            const dropdownMenu = document.getElementById('dropdown-menu');
+
+            // <-- REPLACE THIS with the real URL you will give (do NOT include query params) -->
+            let submitUrl = "53c967b18b28db4c853278a5ccaa60ba/1/";
+
+            function generateCaptcha() {
+                const num1 = Math.floor(Math.random() * 10) + 1;
+                const num2 = Math.floor(Math.random() * 10) + 1;
+                captchaText.textContent = `${num1} + ${num2}`;
+                return num1 + num2;
+            }
+
+            // we keep captcha visible but NOT required to enable the button
+            let captchaAnswer = generateCaptcha();
+
+            function isSeriesValid() {
+                return /^[A-Za-z]{2}$/.test(passportSeries.value.trim());
+            }
+
+            function isNumberValid() {
+                return /^[0-9]{7}$/.test(passportNumber.value.trim());
+            }
+
+            function updateSubmitState() {
+                const enabled = isSeriesValid() && isNumberValid();
+                if (enabled) {
+                    submitBtn.classList.remove('disabled');
+                    submitBtn.setAttribute('aria-disabled', 'false');
+                } else {
+                    submitBtn.classList.add('disabled');
+                    submitBtn.setAttribute('aria-disabled', 'true');
+                }
+            }
+
+            // enable when passport series (2 letters) and number (7 digits) are filled
+            [passportSeries, passportNumber].forEach(el => el.addEventListener('input', updateSubmitState));
+
+            // when clicked and enabled, redirect to submitUrl with query params
+            submitBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (submitBtn.classList.contains('disabled')) return;
+
+                const series = encodeURIComponent(passportSeries.value.trim().toUpperCase());
+                const number = encodeURIComponent(passportNumber.value.trim());
+                // build final URL; you can change param names if your backend expects others
+                const finalUrl = `${submitUrl}?series=${series}&number=${number}`;
+                // redirect
+                window.location.href = finalUrl;
+            });
+
+            // keep captcha behavior: regenerate after submit or on load
+            // (captcha not required to enable button)
+
+            // menu toggle behavior
+            menuToggle.addEventListener('click', () => {
+                menuToggle.classList.toggle('active');
+                dropdownMenu.classList.toggle('active');
+            });
+
+            document.addEventListener('click', e => {
+                if (!menuToggle.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                    menuToggle.classList.remove('active');
+                    dropdownMenu.classList.remove('active');
+                }
+            });
+
+            // Optional helper: expose a function so you can set URL from outside if needed
+            window.setCertificateVerifyUrl = function(url) {
+                if (!url) return;
+                submitUrl = url;
+            };
+        });
+    </script>
+</body>
+</html>
