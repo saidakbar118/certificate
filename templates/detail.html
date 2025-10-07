@@ -20,27 +20,23 @@
       width: auto;
       max-width: 100%;
       height: auto;
-      max-height: 90vh; /* kompyuterda ekranning 90% balandligidan oshmasin */
+      max-height: 90vh;
       border-radius: 10px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.1);
     }
 
-    /* 📱 Mobil uchun (balandroq bo‘lishi mumkin) */
     @media (max-width: 768px) {
-      img {
-        max-height: none;
-        width: 100%;
-      }
+      img { max-height: none; width: 100%; }
     }
+
+
   </style>
 </head>
 <body>
-  {% if pk == 1 %}
-    <img src="{% static 'certificate1.png' %}" alt="Sertifikat 1">
-  {% elif pk == 2 %}
-    <img src="{% static 'certificate2.png' %}" alt="Sertifikat 2">
+  {% if certificate.certificate_image %}
+    <img src="{{ certificate.certificate_image.url }}" alt="Sertifikat">
   {% else %}
-    <p>Sertifikat topilmadi 😢</p>
+    <p>Sertifikat rasmi mavjud emas 😢</p>
   {% endif %}
 </body>
 </html>

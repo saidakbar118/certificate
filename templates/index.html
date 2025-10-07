@@ -32,6 +32,24 @@
           #certificate-number {
             text-transform: uppercase;
           }
+
+          .error-banner {
+            background-color: #fee2e2; /* pushti fon */
+            color: #b91c1c; /* qizil matn */
+            border: 1px solid #fecaca;
+            padding: 12px 15px;
+            border-radius: 6px;
+            text-align: center;
+            margin-bottom: 15px;
+            font-weight: 600;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
           
 
         .logo-text { font-size: 18px; font-weight: bold; }
@@ -99,6 +117,12 @@
     <div class="form-container">
         <h2 class="form-title">Sertifikat ma'lumotlarini tekshirish</h2>
 
+        {% if messages %}
+            {% for message in messages %}
+                <div class="error-banner">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
         <!-- NOTE: set `submitUrl` in the script below to the URL you will provide -->
         <form id="certificate-form">
             <div class="form-group">
@@ -133,41 +157,21 @@
         document.addEventListener('DOMContentLoaded', () => {
             const passportSeries = document.getElementById('passport-series');
             const passportNumber = document.getElementById('passport-number');
-            const certificateNumber = document.getElementById('certificate-number'); // 🔹 yangi qo‘shildi
-            const captchaInput = document.getElementById('captcha-input');
+            const certificateNumber = document.getElementById('certificate-number');
             const submitBtn = document.getElementById('submit-btn');
-            const captchaText = document.getElementById('captcha-text');
             const menuToggle = document.getElementById('menu-toggle');
             const dropdownMenu = document.getElementById('dropdown-menu');
-
-            // <-- REPLACE THIS with the real URL you will give (do NOT include query params) -->
-            let submitUrl = "53c967b18b28db4c853278a5ccaa60ba/1/";
-
-            function generateCaptcha() {
-                const num1 = Math.floor(Math.random() * 10) + 1;
-                const num2 = Math.floor(Math.random() * 10) + 1;
-                captchaText.textContent = `${num1} + ${num2}`;
-                return num1 + num2;
-            }
-
-            // we keep captcha visible but NOT required to enable the button
-            let captchaAnswer = generateCaptcha();
-
-            function isSeriesValid() {
-                return /^[A-Za-z]{2}$/.test(passportSeries.value.trim());
-            }
-
-            function isNumberValid() {
-                return /^[0-9]{7}$/.test(passportNumber.value.trim());
-            }
-
-            // 🔹 Sertifikat raqami validatsiyasi (misol: 46AAC2453985ZA)
-            function isCertificateValid() {
-                return /^[0-9]{2}[A-Z]{3}[0-9]{7}[A-Z]{2}$/.test(certificateNumber.value.trim().toUpperCase());
-            }
-
+        
+            // Backend manziling — o‘zgartirishing mumkin
+            let submitUrl = "/certificate/search/";
+        
             function updateSubmitState() {
-                const enabled = isSeriesValid() && isNumberValid() && isCertificateValid();
+                // 🔹 Endi hech qanday regex cheklov yo‘q
+                const enabled =
+                    passportSeries.value.trim() &&
+                    passportNumber.value.trim() &&
+                    certificateNumber.value.trim();
+        
                 if (enabled) {
                     submitBtn.classList.remove('disabled');
                     submitBtn.setAttribute('aria-disabled', 'false');
@@ -176,45 +180,44 @@
                     submitBtn.setAttribute('aria-disabled', 'true');
                 }
             }
-            
-
-            // enable when passport series (2 letters) and number (7 digits) are filled
-            [passportSeries, passportNumber, certificateNumber].forEach(el => el.addEventListener('input', updateSubmitState));
-            // when clicked and enabled, redirect to submitUrl with query params
+        
+            // Har inputda tekshiradi
+            [passportSeries, passportNumber, certificateNumber].forEach(el =>
+                el.addEventListener('input', updateSubmitState)
+            );
+        
+            // 🔹 Foydalanuvchi bosganda backendga yo‘naltirish
             submitBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 if (submitBtn.classList.contains('disabled')) return;
-            
+        
                 const series = encodeURIComponent(passportSeries.value.trim().toUpperCase());
                 const number = encodeURIComponent(passportNumber.value.trim());
                 const cert = encodeURIComponent(certificateNumber.value.trim().toUpperCase());
-            
+        
                 const finalUrl = `${submitUrl}?series=${series}&number=${number}&certificate=${cert}`;
                 window.location.href = finalUrl;
             });
-
-            // keep captcha behavior: regenerate after submit or on load
-            // (captcha not required to enable button)
-
-            // menu toggle behavior
+        
+            // Menu toggle
             menuToggle.addEventListener('click', () => {
                 menuToggle.classList.toggle('active');
                 dropdownMenu.classList.toggle('active');
             });
-
+        
             document.addEventListener('click', e => {
                 if (!menuToggle.contains(e.target) && !dropdownMenu.contains(e.target)) {
                     menuToggle.classList.remove('active');
                     dropdownMenu.classList.remove('active');
                 }
             });
-
-            // Optional helper: expose a function so you can set URL from outside if needed
+        
             window.setCertificateVerifyUrl = function(url) {
                 if (!url) return;
                 submitUrl = url;
             };
         });
-    </script>
+        </script>
+        
 </body>
 </html>

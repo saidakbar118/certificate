@@ -1,7 +1,8 @@
 from django.urls import path
-from .views import *
+from . import views
 
 urlpatterns = [
-    path('',index_view),
-    path("53c967b18b28db4c853278a5ccaa60ba/<int:pk>/", detail_view, name="detail"),
+    path('', views.index_view, name='index_view'),  # /certificate/
+    path('search/', views.search_view, name='search_view'),  # /certificate/search/
+    path('<int:pk>/', views.detail_view, name='detail_view'),  # /certificate/1/
 ]
