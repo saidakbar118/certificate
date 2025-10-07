@@ -163,7 +163,7 @@
 
             // 🔹 Sertifikat raqami validatsiyasi (misol: 46AAC2453985ZA)
             function isCertificateValid() {
-                return /^[0-9]{2}[A-Z]{3}[0-9]{6}[A-Z]{2}$/.test(certificateNumber.value.trim().toUpperCase());
+                return /^[0-9]{2}[A-Z]{3}[0-9]{7}[A-Z]{2}$/.test(certificateNumber.value.trim().toUpperCase());
             }
 
             function updateSubmitState() {
